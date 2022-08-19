@@ -4,23 +4,28 @@ format: html
 editor: visual
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
 ```{r}
-1 + 1
+library(here)
+library(tidyverse)
+library(beeswarm)
 ```
 
-You can add options to executable code like this
-
 ```{r}
-#| echo: false
-2 * 2
+meteorlogical <- read_csv(here("data", "ntl20_v6.csv"))
+
+ice_cover <- read_csv(here("data", "ntl33_v7.csv"), na ="-999")
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+```{r}
+ice_cover |> ggplot(aes(y = ice_duration, x = lakeid)) + geom_jitter() + geom_boxplot(outlier.color = NA)
+
+```
+
+```{r}
+summary <- ice_cover |> group_by(year4) |> summarize(mean = mean(ice_duration, na.rm = TRUE))
+
+```
+
+```{r}
+
+```
